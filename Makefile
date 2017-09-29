@@ -4,8 +4,8 @@ all: test
 
 test: main-debug
 
-main-debug: bin/map.o bin/hashes.o
-	clang -g -o main-debug ./bin/map.o ./bin/hashes.o ./src/main.c
+main-debug: # bin/map.o bin/hashes.o
+	clang -g -o main-debug ./src/map.c ./src/hashes.c ./src/main.c
 
 bin/map.o: bin/hashes.o
 	mkdir -p ./bin/
@@ -16,8 +16,8 @@ bin/map.o: bin/hashes.o
 # 	clang -o ./bin/main ./src/main.c
 
 clean:
-	rm -r ./bin
+	rm -r ./bin main-debug main
 
 bin/hashes.o:
 	mkdir -p ./bin/
-	clang -c -o ./bin/hashes.o ./src/hashes.h
+	clang -g -c -o ./bin/hashes.o ./src/hashes.h

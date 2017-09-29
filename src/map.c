@@ -20,6 +20,7 @@ int map_destroy(map * rip) {
         free(rip->arr[i]);
     }
     free(rip->arr);
+    free(rip);
     return 0;
 }
 
