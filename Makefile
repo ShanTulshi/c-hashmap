@@ -5,11 +5,11 @@ all: test
 test: main-debug
 
 main-debug: # bin/map.o bin/hashes.o
-	clang -g -o main-debug ./src/map.c ./src/hashes.c ./src/main.c
+	gcc -g -o main-debug ./src/map.c ./src/hashes.c ./src/main.c
 
 bin/map.o: bin/hashes.o
 	mkdir -p ./bin/
-	clang -g -c -o ./bin/map.o ./src/map.c
+	gcc -g -c -o ./bin/map.o ./src/map.c
 
 # build: 
 # 	mkdir -p ./bin/
@@ -20,4 +20,4 @@ clean:
 
 bin/hashes.o:
 	mkdir -p ./bin/
-	clang -g -c -o ./bin/hashes.o ./src/hashes.h
+	gcc -g -c -o ./bin/hashes.o ./src/hashes.h
