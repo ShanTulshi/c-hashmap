@@ -10,30 +10,14 @@
 
 /**
 LINEAR PROBING hash table because building vectors in C is a bit much.
+Maps string -> void pointers
 */
 
-// /**
-//  * All hash functions must take in a void * and return an unsigned long
-//  */
+// Copy constructor typedef
+typedef void * (*cctor)(void *);
 
-// typedef unsigned long (*hashfunc)(void * input);
-
-// /**
-//  * djb2 hash function from http://www.cse.yorku.ca/~oz/hash.html
-//  * found on https://stackoverflow.com/questions/7666509/hash-function-for-string
-//  */
-// unsigned long string_djb2(void * input) {
-// 	assert(input);
-// 	char * str = (char *) input;
-
-// 	unsigned long hash = 5381;
-// 	int c;
-
-// 	while ((c = *str++))
-// 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-// 	return hash;
-// }
+// Destructor typedef
+typedef void (*dtor)(void *);
 
 typedef struct {
     void * key;
@@ -45,22 +29,23 @@ typedef struct {
     size_t size;
     size_t n;
     hashfunc hash;
+    cctor copy;
+    dtor destroy;
 } map;
-
-
-map * map_create(hashfunc f);
 
 // DO NOT PASS NULL
 
+map * map_create(hashfunc f, cctor, dtor);
+
 int map_destroy(map * rip);
 
-int map_insert(map * input, void * key, void * value);
+int map_set(map * input, char * key, void * value);
 
 int map_resize(map * input, size_t newsize);
 
-void * map_get(map * input, void * key);
+void * map_get(map * input, char * key);
 
-void * map_delete(map * input, void * key);
+void * map_delete(map * input, char * key);
 
 double map_load(map * input);
 

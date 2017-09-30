@@ -1,6 +1,6 @@
 #include "hashes.h"
 
-unsigned long string_djb2(void * input) {
+unsigned long string_djb2(char * input) {
 	assert(input);
 	char * str = (char *) input;
 

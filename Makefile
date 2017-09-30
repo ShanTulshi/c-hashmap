@@ -16,7 +16,7 @@ bin/map.o: bin/hashes.o
 # 	clang -o ./bin/main ./src/main.c
 
 clean:
-	rm -r ./bin main-debug main
+	rm -r ./bin main*
 
 bin/hashes.o:
 	mkdir -p ./bin/

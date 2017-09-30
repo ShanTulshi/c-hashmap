@@ -3,12 +3,14 @@
 #define START_SIZE 10       // START_SIZE > 1, preferably powers of two.
 #define MAX_LOAD 0.8        // 0 < MAX_LOAD < 1
 
-map * map_create(hashfunc func) {
+map * map_create(hashfunc func, cctor copy, dtor destroy) {
     map * ret = malloc(sizeof(map));
     ret->arr = (entry **) calloc(START_SIZE, sizeof(entry **));
     ret->size = START_SIZE;
     ret->n = 0;
     ret->hash = func;
+    ret->copy = copy;
+    ret->destroy = destroy;
     return ret;
 }
 
@@ -17,6 +19,9 @@ int map_destroy(map * rip) {
         return 1;
     
     for(size_t i = 0; i < rip->size; i++) {
+        if(rip->arr[i]) {
+            
+        }
         free(rip->arr[i]);
     }
     free(rip->arr);
@@ -24,13 +29,23 @@ int map_destroy(map * rip) {
     return 0;
 }
 
-int map_insert(map * input, void * key, void * value) {
+// Please be safe when calling on strings
+int map_set(map * input, char * key, void * value) {
     // wrap key and value in struct
     entry * e = (entry *) malloc(sizeof(entry));
-    *e = (entry) {key, value};
+    char * k = (char *) malloc(strlen(key) + 1);
+    *e = (entry) {strcpy(k, key), input->copy(value)};
     // find next closest open value
     size_t i = (size_t) input->hash(key);
-    for(; input->arr[i % input->size]; i++);
+    for(; input->arr[i % input->size]; i++) {
+        // check if value already exists.
+        if(strcmp(input->arr[i % input->size]->key, key) == 0) {
+            // replace existing value, destroy old value.
+            input->destroy(input->arr[i % input->size]->value);
+            input->arr[i % input->size]->value = input->copy(value);
+            return 0;
+        }
+    }
     // assign value and update size, resize if necessary.
     input->arr[i % input->size] = e;
     input->n ++;
@@ -52,7 +67,7 @@ int map_resize(map * input, size_t newsize) {
     return 0;
 }
 
-entry * map_get_entry(map * input, void * key) {
+entry * map_get_entry(map * input, char * key) {
     size_t i0 = (size_t) input->hash(key);
     for(size_t i = 0; i < input->size; i++) {
         if(!strcmp(input->arr[(i0 + i) % input->size]->key, key))
@@ -61,14 +76,14 @@ entry * map_get_entry(map * input, void * key) {
     return NULL;
 }
 
-void * map_get(map * input, void * key) {
+void * map_get(map * input, char * key) {
     entry * ret = map_get_entry(input, key);
     if(ret)
         return ret->value;
     return NULL;
 }
 
-void * map_delete(map * input, void * key) {
+void * map_delete(map * input, char * key) {
     void * ret = map_get_entry(input, key);
     if(ret) {
         ret = ((entry *)ret)->value;
