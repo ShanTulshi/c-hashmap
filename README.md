@@ -1,6 +1,12 @@
 # Fixed-size Map (in C)
 
-This is an implementation of a fixed-size map in C (resizing coming soon!). Below is some rudimentary documentation:
+This is an implementation of a fixed-size map in C (resizing coming soon!).
+
+## Install Instructions
+
+### Prerequisites
+
+Make sure you have [`gcc`](https://gcc.gnu.org/) and [`make`](https://www.gnu.org/software/make/), and make sure the default C revision is C99 or later.
 
 ## Types
 
