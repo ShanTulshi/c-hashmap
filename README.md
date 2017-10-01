@@ -8,7 +8,7 @@ This is an implementation of a fixed-size map in C (resizing coming soon!).
 
 Make sure you have [`gcc`](https://gcc.gnu.org/) and [`make`](https://www.gnu.org/software/make/), and make sure the default C revision is C99 or later.
 
-Run `make build` to create executable, modify main.c for tests.
+Run `make build` to create executable, modify `main.c` for tests.
 
 ## Types
 
