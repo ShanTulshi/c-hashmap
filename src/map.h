@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <string.h>
 #include <assert.h> 
-#include <stdio.h>
 
 #include "hashes.h"
 
@@ -13,8 +12,6 @@
 LINEAR PROBING hash table because building vectors in C is a bit much.
 Maps string -> void pointers
 */
-
-int MAP_FULL = -1;
 
 // Copy constructor typedef
 typedef void * (*cctor)(void *);

@@ -2,22 +2,12 @@
 
 all: test
 
-test: main-debug
-
-main-debug: # bin/map.o bin/hashes.o
+test: 
 	gcc -g -o main-debug ./src/map.c ./src/hashes.c ./src/main.c
 
-bin/map.o: bin/hashes.o
-	mkdir -p ./bin/
-	gcc -g -c -o ./bin/map.o ./src/map.c
-
-# build: 
-# 	mkdir -p ./bin/
-# 	clang -o ./bin/main ./src/main.c
+build: 
+	gcc -o main ./src/map.c ./src/hashes.c ./src/main.c
 
 clean:
 	rm -r ./bin main*
 
-bin/hashes.o:
-	mkdir -p ./bin/
-	gcc -g -c -o ./bin/hashes.o ./src/hashes.h

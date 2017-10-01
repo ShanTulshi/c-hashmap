@@ -8,8 +8,7 @@
 entry * map_get_entry(map * input, char * key) {
     size_t i0 = (size_t) input->hash(key);
     for(size_t i = 0; i < input->size; i++) {
-        printf("%lu\n", i0 + i);
-        if(input->arr[(i0 + i) % input->size] && (strcmp(input->arr[(i0 + i) % input->size]->key, key) != 0))
+        if(input->arr[(i0 + i) % input->size] && (strcmp(input->arr[(i0 + i) % input->size]->key, key) == 0))
             return input->arr[(i0 + i) % input->size];
     }
     return NULL;
@@ -59,7 +58,7 @@ int map_destroy(map * rip) {
 
 int map_set(map * input, char * key, void * value) {
     if(input->n == input->size) {
-        return MAP_FULL;
+        return -1;
     }
     size_t i = input->hash(key) % input->size;
     for(; input->arr[i] && (strcmp(input->arr[i]->key, key) != 0); i = (i + 1) % input->size);
