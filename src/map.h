@@ -14,6 +14,8 @@ LINEAR PROBING hash table because building vectors in C is a bit much.
 Maps string -> void pointers
 */
 
+int MAP_FULL = -1;
+
 // Copy constructor typedef
 typedef void * (*cctor)(void *);
 
@@ -36,6 +38,10 @@ typedef struct {
 
 // DO NOT PASS NULL
 
+/**
+ * Create a map instance
+ * 
+ */
 map * map_create(size_t size, hashfunc f, cctor, dtor);
 
 int map_destroy(map * rip);

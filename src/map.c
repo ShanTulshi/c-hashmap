@@ -4,11 +4,12 @@
 #define MAX_LOAD 0.8        // 0 < MAX_LOAD < 1
 
 /************* ENTRY UTILS **************/
+
 entry * map_get_entry(map * input, char * key) {
     size_t i0 = (size_t) input->hash(key);
     for(size_t i = 0; i < input->size; i++) {
         printf("%lu\n", i0 + i);
-        if(input->arr[(i0 + i) % input->size] && !strcmp(input->arr[(i0 + i) % input->size]->key, key))
+        if(input->arr[(i0 + i) % input->size] && (strcmp(input->arr[(i0 + i) % input->size]->key, key) != 0))
             return input->arr[(i0 + i) % input->size];
     }
     return NULL;
@@ -28,6 +29,8 @@ void entry_destroy(map * input, entry * e) {
         free(e);
     }
 }
+
+/*********** MAP FUNCTIONS ************/
 
 map * map_create(size_t size, hashfunc func, cctor copy, dtor destroy) {
     map * ret = malloc(sizeof(map));
@@ -56,14 +59,16 @@ int map_destroy(map * rip) {
 
 int map_set(map * input, char * key, void * value) {
     if(input->n == input->size) {
-        return -1;
+        return MAP_FULL;
     }
     size_t i = input->hash(key) % input->size;
-    for(; input->arr[i] && !strcmp(input->arr[i]->key, key); i = (i + 1) % input->size);
+    for(; input->arr[i] && (strcmp(input->arr[i]->key, key) != 0); i = (i + 1) % input->size);
     // found the right index to replace
-    entry_destroy(input, input->arr[i]);
+    if(input->arr[i]) 
+        entry_destroy(input, input->arr[i]);
+    else 
+        input->n++;
     input->arr[i] = entry_create(input, key, value);
-    input->n++;
     return 0;
 }
 
@@ -94,10 +99,11 @@ void * map_get(map * input, char * key) {
 }
 
 void * map_delete(map * input, char * key) {
-    void * ret = map_get_entry(input, key);
-    if(ret) {
-        ret = ((entry *)ret)->value;
-        free(ret);
+    entry * e = map_get_entry(input, key);
+    if(e) {
+        void * ret = e->value;
+        free(e->key);
+        free(e);
         return ret;
     }
     return NULL;
