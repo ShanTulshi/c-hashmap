@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <string.h>
 #include <assert.h> 
+#include <stdio.h>
 
 #include "hashes.h"
 
@@ -35,13 +36,15 @@ typedef struct {
 
 // DO NOT PASS NULL
 
-map * map_create(hashfunc f, cctor, dtor);
+map * map_create(size_t size, hashfunc f, cctor, dtor);
 
 int map_destroy(map * rip);
 
+// returns -1 if map is out of space.
 int map_set(map * input, char * key, void * value);
 
-int map_resize(map * input, size_t newsize);
+// for future expansion
+// int map_resize(map * input, size_t newsize);
 
 void * map_get(map * input, char * key);
 
