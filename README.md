@@ -56,16 +56,16 @@ int map_set(map * input, char * key, void * value)
 Creates a new `entry` for the given `key`-`value` pair, and inserts it into map. In case of a duplicate `key`, deletes old entry and places new one in its place. If the map is full, returns `MAP_FULL`.
 
 ```c
-map_get(map * input, char * key)
+void * map_get(map * input, char * key)
 ```
 Retrieves value represented by `key` in the input map. Does not alter input map.
 
 ```c
-map_delete(map * input, char * key)
+void * map_delete(map * input, char * key)
 ```
 Removes entry represented by `key` in `input`, and returns value contained.
 
 ```c
-map_load(map * input)
+double map_load(map * input)
 ```
 Returns the input map's load, defined as the number of entries stored in the map divided by the total size of the map.
