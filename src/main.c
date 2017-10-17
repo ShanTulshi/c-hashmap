@@ -24,8 +24,16 @@ int main(int argc, char * argv[]) {
 	map_set(thing, "asdf", "asdf");
 	if(map_set(thing, "sda", "asdf") == -1)
 		printf("success!\n");
+
+	if(map_get(thing, "askdjfa") == NULL) 
+		printf("success!\n");
+
+	if(map_delete(thing, "asdjkfa") == NULL)
+		printf("success\n");
 	map_destroy(thing);
 
-	
+	thing = map_create(10, &string_djb2, cc, d);
+	map_destroy(thing);
+
 	return 0;
 }
