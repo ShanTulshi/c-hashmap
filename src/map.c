@@ -45,7 +45,7 @@ map * map_create(size_t size, hashfunc func, cctor copy, dtor destroy) {
 int map_destroy(map * rip) {
     if(!rip)
         return 1;
-    
+
     for(size_t i = 0; i < rip->size; i++) {
         if(rip->arr[i]) {
             entry_destroy(rip, rip->arr[i]);
@@ -63,32 +63,31 @@ int map_set(map * input, char * key, void * value) {
     size_t i = input->hash(key) % input->size;
     for(; input->arr[i] && (strcmp(input->arr[i]->key, key) != 0); i = (i + 1) % input->size);
     // found the right index to replace
-    if(input->arr[i]) 
+    if(input->arr[i])
         entry_destroy(input, input->arr[i]);
-    else 
+    else
         input->n++;
     input->arr[i] = entry_create(input, key, value);
     return 0;
 }
 
-// for the future!
-// int map_resize(map * input, size_t newsize) {
-//     if(((newsize > START_SIZE) && (newsize < input->size / 2)) || (newsize > input->size * MAX_LOAD) || (input->size - newsize < 2)) {
-//         entry ** old = input->arr;
-//         size_t oldsize = input->size;
-//         input->arr = calloc(newsize, sizeof(entry **));
-//         input->size = newsize;
-//         input->n = 0;
-//         for(size_t i = 0; i < oldsize; i++) {
-//             if(old[i]) {
-//                 map_set_entry(input, old[i]);
-//             }
-//         }
-//         free(input->arr);
-//         input->arr = ret;
-//     }
-//     return 0;
-// }
+int map_resize(map * input, size_t newsize) {
+    if(((newsize > START_SIZE) && (newsize < input->size / 2)) || (newsize > input->size * MAX_LOAD) || (input->size - newsize < 2)) {
+        entry ** oldmap = input->arr;
+        map old = {oldmap, 0, 0, 0, 0, 0};
+        size_t oldsize = input->size;
+        input->arr = (entry **) calloc(newsize, sizeof(entry **));
+        input->size = newsize;
+        input->n = 0;
+        for(size_t i = 0; i < oldsize; i++) {
+            if(old[i]) {
+                map_set(input, old[i]->key, old[i]->value);
+            }
+        }
+        free(input->arr);
+    }
+    return 0;
+}
 
 void * map_get(map * input, char * key) {
     entry * ret = map_get_entry(input, key);

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include <assert.h> 
+#include <assert.h>
 
 #include "hashes.h"
 
@@ -20,8 +20,8 @@ typedef void * (*cctor)(void *);
 typedef void (*dtor)(void *);
 
 typedef struct {
-    void * key;
-	void * value;
+  void * key;
+  void * value;
 } entry;
 
 typedef struct {
@@ -37,7 +37,7 @@ typedef struct {
 
 /**
  * Create a map instance
- * 
+ *
  */
 map * map_create(size_t size, hashfunc f, cctor, dtor);
 
